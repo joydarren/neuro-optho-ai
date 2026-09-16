@@ -12,7 +12,7 @@ import keras
 import cv2
 import numpy as np
 from PIL import Image
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 import scipy.ndimage as ndi
 from skimage.morphology import skeletonize
@@ -202,7 +202,15 @@ CORS(app)
 
 @app.route("/")
 def home():
-    return "Neuro-Optho AI Running 🚀"
+    return render_template("index.html")
+
+@app.route("/health")
+def health():
+    return jsonify({"status": "running", "message": "Neuro-Optho AI Running 🚀"})
+
+@app.route("/samples/<path:filename>")
+def samples(filename):
+    return send_from_directory("screenshots", filename)
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -249,13 +257,16 @@ def predict():
     level = "Low" if final_score<30 else "Moderate" if final_score<60 else "High"
 
     return jsonify({
-        "glaucoma_prob":glaucoma_prob,
-        "dr_prob":dr_prob,
-        "alz_stage":stage,
-        "eye_score":eye_score,
-        "brain_score":brain_score,
-        "final_score":final_score,
-        "risk_level":level
+        "glaucoma_prob": round(glaucoma_prob, 4),
+        "dr_prob": round(dr_prob, 4),
+        "alz_stage": stage,
+        "eye_score": eye_score,
+        "brain_score": brain_score,
+        "final_score": final_score,
+        "risk_level": level,
+        "vessel_density": round(float(density), 4),
+        "branch_density": round(float(branch_density), 4),
+        "tortuosity": round(float(tortuosity), 4)
     })
 
 

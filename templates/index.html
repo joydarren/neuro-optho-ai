@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neuro-Optho AI | Multimodal Cognitive & Ophthalmic Diagnostics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; color: black !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-cyan-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 text-white font-bold text-xl">
+          <i class="fa-solid fa-brain"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">Neuro-Optho AI</span>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">Clinical v1.0</span>
+          </div>
+          <p class="text-xs text-slate-400">Multimodal Retinal & Brain Cognitive Screening System</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <div class="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Engine Active</span>
+        </div>
+        <a href="https://github.com/joydarren/neuro-optho-ai" target="_blank" class="text-slate-400 hover:text-white text-sm flex items-center space-x-1.5 transition">
+          <i class="fa-brands fa-github text-base"></i>
+          <span class="hidden md:inline">GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center max-w-3xl mx-auto mb-10 no-print">
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        Early Cognitive Risk & Ophthalmic Screening
+      </h1>
+      <p class="mt-3 text-slate-400 text-sm sm:text-base leading-relaxed">
+        Upload a retinal fundus scan and a brain MRI to run multimodal deep learning inference for Glaucoma, Diabetic Retinopathy, Retinal Vessel Biomarkers, and Alzheimer’s stage staging.
+      </p>
+    </div>
+
+    <!-- Upload & Input Form -->
+    <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur no-print mb-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Retinal Fundus Card -->
+        <div class="bg-slate-950/60 border border-slate-800/90 rounded-xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center space-x-2">
+                <span class="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-sm"><i class="fa-solid fa-eye"></i></span>
+                <h3 class="text-base font-bold text-white">1. Retinal Fundus Scan</h3>
+              </div>
+              <button type="button" onclick="loadSample('fundus')" class="text-xs text-cyan-400 hover:text-cyan-300 font-medium px-2.5 py-1 rounded bg-cyan-950/60 border border-cyan-800/60 transition">
+                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Load Sample
+              </button>
+            </div>
+            <p class="text-xs text-slate-400 mb-4">Input for Glaucoma, DR detection & U-Net vessel segmentation.</p>
+
+            <div id="fundusDropzone" onclick="document.getElementById('fundusInput').click()" class="border-2 border-dashed border-slate-700 hover:border-cyan-500 rounded-xl p-6 text-center cursor-pointer transition bg-slate-900/30 group min-h-[180px] flex items-center justify-center">
+              <input type="file" id="fundusInput" accept="image/*" class="hidden" onchange="handleFileSelect('fundus', this.files[0])">
+              <div id="fundusPlaceholder">
+                <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-500 group-hover:text-cyan-400 mb-2 transition"></i>
+                <p class="text-xs font-semibold text-slate-300">Click to browse or drag & drop</p>
+                <p class="text-[11px] text-slate-500 mt-1">PNG, JPG or JPEG</p>
+              </div>
+              <div id="fundusPreviewBox" class="hidden">
+                <img id="fundusPreview" class="max-h-44 mx-auto rounded-lg shadow-md border border-slate-700 object-cover" alt="Fundus Preview">
+                <p id="fundusFileName" class="text-xs text-cyan-400 mt-2 font-mono truncate max-w-[200px] mx-auto"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Brain MRI Card -->
+        <div class="bg-slate-950/60 border border-slate-800/90 rounded-xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center space-x-2">
+                <span class="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-sm"><i class="fa-solid fa-brain"></i></span>
+                <h3 class="text-base font-bold text-white">2. Brain MRI Scan</h3>
+              </div>
+              <button type="button" onclick="loadSample('brain')" class="text-xs text-purple-400 hover:text-purple-300 font-medium px-2.5 py-1 rounded bg-purple-950/60 border border-purple-800/60 transition">
+                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Load Sample
+              </button>
+            </div>
+            <p class="text-xs text-slate-400 mb-4">Input for DenseNet Alzheimer's Stage classification.</p>
+
+            <div id="brainDropzone" onclick="document.getElementById('brainInput').click()" class="border-2 border-dashed border-slate-700 hover:border-purple-500 rounded-xl p-6 text-center cursor-pointer transition bg-slate-900/30 group min-h-[180px] flex items-center justify-center">
+              <input type="file" id="brainInput" accept="image/*" class="hidden" onchange="handleFileSelect('brain', this.files[0])">
+              <div id="brainPlaceholder">
+                <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-500 group-hover:text-purple-400 mb-2 transition"></i>
+                <p class="text-xs font-semibold text-slate-300">Click to browse or drag & drop</p>
+                <p class="text-[11px] text-slate-500 mt-1">PNG, JPG or JPEG</p>
+              </div>
+              <div id="brainPreviewBox" class="hidden">
+                <img id="brainPreview" class="max-h-44 mx-auto rounded-lg shadow-md border border-slate-700 object-cover" alt="MRI Preview">
+                <p id="brainFileName" class="text-xs text-purple-400 mt-2 font-mono truncate max-w-[200px] mx-auto"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Button -->
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button id="analyzeBtn" onclick="runAnalysis()" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white font-bold text-sm shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] active:scale-[0.98] transition flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-microchip"></i>
+          <span>Run Multimodal Analysis</span>
+        </button>
+        <button type="button" onclick="resetForm()" class="text-xs text-slate-400 hover:text-slate-200 transition underline underline-offset-4">
+          Reset Inputs
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loadingBox" class="hidden mt-8 text-center">
+        <div class="inline-flex items-center space-x-3 px-5 py-3 rounded-full bg-slate-800/80 border border-slate-700">
+          <svg class="animate-spin h-5 w-5 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+          <span id="loadingStatusText" class="text-sm text-slate-300 font-medium">Processing fundus & MRI scans with deep learning models...</span>
+        </div>
+      </div>
+
+      <!-- Error Box -->
+      <div id="errorBox" class="hidden mt-6 p-4 rounded-xl bg-red-950/50 border border-red-800/80 text-red-300 text-xs flex items-center space-x-3">
+        <i class="fa-solid fa-triangle-exclamation text-base text-red-400"></i>
+        <span id="errorMessage">Error processing request</span>
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="resultsSection" class="hidden space-y-6">
+
+      <!-- Overall Cognitive Score Header Card -->
+      <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-16 -top-16 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+          <div class="text-center md:text-left">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Multimodal Fusion Result</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Combined Cognitive Risk Index</h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl">
+              Computed via 50% Ocular Retinal Risk and 50% Neurological Brain Risk Score Fusion.
+            </p>
+          </div>
+
+          <div class="flex items-center space-x-6">
+            <div class="text-center">
+              <div id="scoreCircle" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-4 flex flex-col items-center justify-center bg-slate-950 shadow-inner">
+                <span id="finalScoreVal" class="text-3xl sm:text-4xl font-black">--</span>
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">/ 100</span>
+              </div>
+            </div>
+            <div class="flex flex-col items-start space-y-2">
+              <span id="riskLevelBadge" class="px-3.5 py-1.5 rounded-full text-xs font-extrabold tracking-wider uppercase border shadow-sm">
+                Evaluating...
+              </span>
+              <span id="riskSummaryDesc" class="text-xs text-slate-400 max-w-[220px] leading-relaxed"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail Grid: Eye vs Brain -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Retinal & Ocular Analysis Card -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-5">
+            <div class="flex items-center space-x-3">
+              <span class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-base"><i class="fa-solid fa-eye"></i></span>
+              <div>
+                <h3 class="text-base font-bold text-white">Retinal Biomarker Analytics</h3>
+                <p class="text-xs text-slate-400">EfficientNet-B0 &amp; U-Net Vessel Segmentation</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-slate-500 block">Eye Score</span>
+              <span id="eyeScoreVal" class="text-lg font-bold text-cyan-400">-- / 40</span>
+            </div>
+          </div>
+
+          <!-- Disease Probabilities -->
+          <div class="space-y-4 mb-6">
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-300">Glaucoma Risk</span>
+                <span id="glaucomaProbVal" class="font-mono text-cyan-400">0%</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div id="glaucomaBar" class="bg-cyan-500 h-2 rounded-full transition-all duration-700" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-slate-300">Diabetic Retinopathy (DR) Risk</span>
+                <span id="drProbVal" class="font-mono text-amber-400">0%</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div id="drBar" class="bg-amber-500 h-2 rounded-full transition-all duration-700" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vessel Metrics -->
+          <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-4">
+            <span class="text-[11px] uppercase font-bold tracking-wider text-slate-400 block mb-3">Extracted Vascular Biomarkers</span>
+            <div class="grid grid-cols-3 gap-2 text-center">
+              <div class="bg-slate-900/60 p-2.5 rounded-lg border border-slate-800/60">
+                <span class="text-[10px] text-slate-400 block">Vessel Density</span>
+                <span id="vesselDensityVal" class="text-sm font-bold text-white font-mono">--</span>
+              </div>
+              <div class="bg-slate-900/60 p-2.5 rounded-lg border border-slate-800/60">
+                <span class="text-[10px] text-slate-400 block">Branch Density</span>
+                <span id="branchDensityVal" class="text-sm font-bold text-white font-mono">--</span>
+              </div>
+              <div class="bg-slate-900/60 p-2.5 rounded-lg border border-slate-800/60">
+                <span class="text-[10px] text-slate-400 block">Tortuosity Index</span>
+                <span id="tortuosityVal" class="text-sm font-bold text-white font-mono">--</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Neurological & MRI Card -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-5">
+              <div class="flex items-center space-x-3">
+                <span class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-base"><i class="fa-solid fa-brain"></i></span>
+                <div>
+                  <h3 class="text-base font-bold text-white">MRI Neurological Screening</h3>
+                  <p class="text-xs text-slate-400">DenseNet Alzheimer's Stage Classifier</p>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-slate-500 block">Brain Score</span>
+                <span id="brainScoreVal" class="text-lg font-bold text-purple-400">-- / 90</span>
+              </div>
+            </div>
+
+            <!-- Staged Result -->
+            <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-5 text-center mb-5">
+              <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Identified Clinical Stage</span>
+              <div class="mt-2">
+                <span id="alzStageBadge" class="inline-block text-lg sm:text-xl font-extrabold px-4 py-1.5 rounded-xl border">
+                  Evaluating...
+                </span>
+              </div>
+              <p id="alzStageDesc" class="text-xs text-slate-400 mt-2 max-w-sm mx-auto leading-relaxed">
+                Structural MRI analysis based on cerebral and ventricular morphology.
+              </p>
+            </div>
+          </div>
+
+          <!-- Staging Legend -->
+          <div class="border-t border-slate-800 pt-4">
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Stage Risk Reference</span>
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+              <div class="flex items-center justify-between p-2 rounded bg-slate-950/40 text-slate-300">
+                <span>Non Demented</span>
+                <span class="font-mono text-emerald-400">Risk 0</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded bg-slate-950/40 text-slate-300">
+                <span>Very Mild</span>
+                <span class="font-mono text-cyan-400">Risk 30</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded bg-slate-950/40 text-slate-300">
+                <span>Mild Demented</span>
+                <span class="font-mono text-amber-400">Risk 60</span>
+              </div>
+              <div class="flex items-center justify-between p-2 rounded bg-slate-950/40 text-slate-300">
+                <span>Moderate</span>
+                <span class="font-mono text-rose-400">Risk 90</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Buttons (Print & Reset) -->
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-800 no-print">
+        <button onclick="window.print()" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition flex items-center space-x-2">
+          <i class="fa-solid fa-print"></i>
+          <span>Print Clinical Report</span>
+        </button>
+        <button onclick="resetForm()" class="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition flex items-center space-x-2">
+          <i class="fa-solid fa-rotate-right"></i>
+          <span>Analyze New Patient</span>
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-16 border-t border-slate-800/80 py-6 text-center text-xs text-slate-500 no-print">
+    <p>Neuro-Optho AI — Academic Research & Clinical Decision Support System</p>
+    <p class="mt-1">Developed by Joy Darren, Avinash Valavoju, E. Ramya, N. Sarayu</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    let files = {
+      fundus: null,
+      brain: null
+    };
+
+    function handleFileSelect(type, file) {
+      if (!file) return;
+      files[type] = file;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById(`${type}Preview`).src = e.target.result;
+        document.getElementById(`${type}Placeholder`).classList.add('hidden');
+        document.getElementById(`${type}PreviewBox`).classList.remove('hidden');
+        document.getElementById(`${type}FileName`).textContent = file.name;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function loadSample(type) {
+      const filename = type === 'fundus' ? 'eye.png' : 'brain.png';
+      try {
+        const res = await fetch(`/samples/${filename}`);
+        const blob = await res.blob();
+        const file = new File([blob], `${filename}`, { type: 'image/png' });
+        handleFileSelect(type, file);
+      } catch (err) {
+        alert('Could not load sample image: ' + err.message);
+      }
+    }
+
+    function resetForm() {
+      files = { fundus: null, brain: null };
+      ['fundus', 'brain'].forEach(type => {
+        document.getElementById(`${type}Input`).value = '';
+        document.getElementById(`${type}Placeholder`).classList.remove('hidden');
+        document.getElementById(`${type}PreviewBox`).classList.add('hidden');
+      });
+      document.getElementById('resultsSection').classList.add('hidden');
+      document.getElementById('errorBox').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Drag and drop setup
+    ['fundus', 'brain'].forEach(type => {
+      const dropzone = document.getElementById(`${type}Dropzone`);
+      ['dragenter', 'dragover'].forEach(name => {
+        dropzone.addEventListener(name, (e) => {
+          e.preventDefault();
+          dropzone.classList.add('border-cyan-400');
+        });
+      });
+      ['dragleave', 'drop'].forEach(name => {
+        dropzone.addEventListener(name, (e) => {
+          e.preventDefault();
+          dropzone.classList.remove('border-cyan-400');
+        });
+      });
+      dropzone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        if (dt.files && dt.files[0]) {
+          handleFileSelect(type, dt.files[0]);
+        }
+      });
+    });
+
+    async function runAnalysis() {
+      const errorBox = document.getElementById('errorBox');
+      const errorMessage = document.getElementById('errorMessage');
+      const loadingBox = document.getElementById('loadingBox');
+      const analyzeBtn = document.getElementById('analyzeBtn');
+      const resultsSection = document.getElementById('resultsSection');
+
+      errorBox.classList.add('hidden');
+
+      if (!files.fundus || !files.brain) {
+        errorBox.classList.remove('hidden');
+        errorMessage.textContent = 'Please provide both a Retinal Fundus scan and a Brain MRI scan before analyzing.';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('fundus', files.fundus);
+      formData.append('brain', files.brain);
+
+      loadingBox.classList.remove('hidden');
+      analyzeBtn.disabled = true;
+      analyzeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      try {
+        const response = await fetch('/predict', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server returned HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        renderResults(data);
+      } catch (err) {
+        errorBox.classList.remove('hidden');
+        errorMessage.textContent = 'Inference failed: ' + err.message;
+      } finally {
+        loadingBox.classList.add('hidden');
+        analyzeBtn.disabled = false;
+        analyzeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    function renderResults(data) {
+      const results = document.getElementById('resultsSection');
+      results.classList.remove('hidden');
+
+      // Final Score & Risk
+      const score = data.final_score ?? 0;
+      document.getElementById('finalScoreVal').textContent = score;
+
+      const circle = document.getElementById('scoreCircle');
+      const badge = document.getElementById('riskLevelBadge');
+      const desc = document.getElementById('riskSummaryDesc');
+
+      badge.textContent = `${data.risk_level || 'LOW'} COGNITIVE RISK`;
+
+      if (data.risk_level === 'High') {
+        circle.className = 'w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-4 flex flex-col items-center justify-center bg-slate-950 border-rose-500 text-rose-400 shadow-rose-500/20 shadow-lg';
+        badge.className = 'px-3.5 py-1.5 rounded-full text-xs font-extrabold tracking-wider uppercase border bg-rose-500/10 border-rose-500/40 text-rose-400';
+        desc.textContent = 'High cumulative probability of neuro-ophthalmic and cognitive impairment.';
+      } else if (data.risk_level === 'Moderate') {
+        circle.className = 'w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-4 flex flex-col items-center justify-center bg-slate-950 border-amber-500 text-amber-400 shadow-amber-500/20 shadow-lg';
+        badge.className = 'px-3.5 py-1.5 rounded-full text-xs font-extrabold tracking-wider uppercase border bg-amber-500/10 border-amber-500/40 text-amber-400';
+        desc.textContent = 'Moderate risk observed. Secondary clinical examination advised.';
+      } else {
+        circle.className = 'w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-4 flex flex-col items-center justify-center bg-slate-950 border-emerald-500 text-emerald-400 shadow-emerald-500/20 shadow-lg';
+        badge.className = 'px-3.5 py-1.5 rounded-full text-xs font-extrabold tracking-wider uppercase border bg-emerald-500/10 border-emerald-500/40 text-emerald-400';
+        desc.textContent = 'Normal vascular and neuroimaging markers within healthy range.';
+      }
+
+      // Eye metrics
+      document.getElementById('eyeScoreVal').textContent = `${data.eye_score ?? 0} / 40`;
+      const glaucomaPct = ((data.glaucoma_prob ?? 0) * 100).toFixed(1);
+      const drPct = ((data.dr_prob ?? 0) * 100).toFixed(1);
+
+      document.getElementById('glaucomaProbVal').textContent = `${glaucomaPct}%`;
+      document.getElementById('glaucomaBar').style.width = `${glaucomaPct}%`;
+
+      document.getElementById('drProbVal').textContent = `${drPct}%`;
+      document.getElementById('drBar').style.width = `${drPct}%`;
+
+      document.getElementById('vesselDensityVal').textContent = data.vessel_density !== undefined ? data.vessel_density : '--';
+      document.getElementById('branchDensityVal').textContent = data.branch_density !== undefined ? data.branch_density : '--';
+      document.getElementById('tortuosityVal').textContent = data.tortuosity !== undefined ? data.tortuosity : '--';
+
+      // Brain metrics
+      document.getElementById('brainScoreVal').textContent = `${data.brain_score ?? 0} / 90`;
+      const alzBadge = document.getElementById('alzStageBadge');
+      alzBadge.textContent = data.alz_stage || 'Unknown';
+
+      if (data.alz_stage === 'Non Demented') {
+        alzBadge.className = 'inline-block text-lg sm:text-xl font-extrabold px-4 py-1.5 rounded-xl border bg-emerald-500/10 border-emerald-500/40 text-emerald-400';
+      } else if (data.alz_stage === 'Very Mild Demented') {
+        alzBadge.className = 'inline-block text-lg sm:text-xl font-extrabold px-4 py-1.5 rounded-xl border bg-cyan-500/10 border-cyan-500/40 text-cyan-400';
+      } else if (data.alz_stage === 'Mild Demented') {
+        alzBadge.className = 'inline-block text-lg sm:text-xl font-extrabold px-4 py-1.5 rounded-xl border bg-amber-500/10 border-amber-500/40 text-amber-400';
+      } else {
+        alzBadge.className = 'inline-block text-lg sm:text-xl font-extrabold px-4 py-1.5 rounded-xl border bg-rose-500/10 border-rose-500/40 text-rose-400';
+      }
+
+      results.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
