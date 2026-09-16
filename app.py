@@ -8,6 +8,7 @@ import timm
 import torchvision.transforms as transforms
 import segmentation_models_pytorch as smp
 import tensorflow as tf
+import keras
 import cv2
 import numpy as np
 from PIL import Image
@@ -104,17 +105,17 @@ def load_models():
 
     if dr_model is None:
         print("Loading DR model...")
-        dr_model = tf.keras.models.load_model(
-            MODEL_PATHS["dr"],
-            compile=False
-        )
+        try:
+            dr_model = keras.models.load_model(MODEL_PATHS["dr"], compile=False)
+        except Exception:
+            dr_model = tf.keras.models.load_model(MODEL_PATHS["dr"], compile=False)
 
     if alz_model is None:
         print("Loading Alzheimer model...")
-        alz_model = tf.keras.models.load_model(
-            MODEL_PATHS["alz"],
-            compile=False
-        )
+        try:
+            alz_model = keras.models.load_model(MODEL_PATHS["alz"], compile=False)
+        except Exception:
+            alz_model = tf.keras.models.load_model(MODEL_PATHS["alz"], compile=False)
 
 # ==========================
 # TRANSFORMS
